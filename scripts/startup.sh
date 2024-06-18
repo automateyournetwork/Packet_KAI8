@@ -1,1 +1,2 @@
-streamlit run packet_kai8.py
+#!/bin/bash
+streamlit run /app/packet_kai8.py

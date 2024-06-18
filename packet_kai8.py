@@ -75,7 +75,6 @@ class ChatWithPCAP:
 
     def store_in_chroma(self, docs):
         self.vectordb = Chroma.from_documents(docs, embedding=self.embedding_model)
-        self.vectordb.persist()
 
     def initialize_llm_chains(self):
         llm_chains = {}
@@ -196,13 +195,8 @@ def upload_and_convert_pcap():
         st.session_state['json_path'] = json_path
         st.success("PCAP file uploaded and converted to JSON.")
         # Fetch and display the models in a select box
-        models = get_ollama_models("http://ollama:11434/")  # Make sure to use the correct base URL
-        if models:
-            selected_model = st.selectbox("Select Model", models)
-            st.session_state['selected_model'] = selected_model
-            
-            if st.button("Proceed to Chat"):
-                st.session_state['page'] = 2        
+        if st.button("Proceed to Chat"):
+            st.session_state['page'] = 2        
 
 # Streamlit UI for chat interface
 def chat_interface():
