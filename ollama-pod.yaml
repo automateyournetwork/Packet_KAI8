@@ -1,0 +1,234 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ollama-pod
+  labels:
+    app: ollama
+spec:
+  containers:
+  - name: ollama-tinyllama
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull tinyllama && tail -f /dev/null']
+    ports:
+    - containerPort: 11434
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11434"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage
+  - name: ollama-phi3
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull phi3 && tail -f /dev/null']
+    ports:
+    - containerPort: 11435
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11435"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage
+  - name: ollama-llama3
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull llama3 && tail -f /dev/null']
+    ports:
+    - containerPort: 11436
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11436"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage
+  - name: ollama-qwen2
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull qwen2 && tail -f /dev/null']
+    ports:
+    - containerPort: 11437
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11437"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage
+  - name: ollama-aya
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull aya && tail -f /dev/null']
+    ports:
+    - containerPort: 11438
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11438"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage
+  - name: ollama-mistral
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull mistral && tail -f /dev/null']
+    ports:
+    - containerPort: 11439
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11439"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage
+  - name: ollama-gemma
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull gemma && tail -f /dev/null']
+    ports:
+    - containerPort: 11440
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11440"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage
+  - name: ollama-wizardlm2
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull wizardlm2 && tail -f /dev/null']
+    ports:
+    - containerPort: 11441
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11441"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage
+  - name: ollama-openchat
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull openchat && tail -f /dev/null']
+    ports:
+    - containerPort: 11442
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11442"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage      
+  - name: packet-kai8
+    image: johncapobianco/packet_kai8:latest
+    ports:
+    - containerPort: 8501
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+        nvidia.com/gpu: 1  # Request one GPU
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+        nvidia.com/gpu: 1  # Limit to one GPU      
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - mountPath: /etc/nginx/nginx.conf
+      name: nginx-config
+      subPath: nginx.conf
+  volumes:
+  - name: model-storage
+    emptyDir: {}
+  - name: nginx-config
+    configMap:
+      name: nginx-config
+  restartPolicy: Always

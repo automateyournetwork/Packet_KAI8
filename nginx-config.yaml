@@ -1,0 +1,270 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    events { }
+    http {
+      log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+      access_log /var/log/nginx/access.log main;
+
+      upstream tinyllama_server {
+        server 127.0.0.1:11434;
+      }
+      upstream phi3_server {
+        server 127.0.0.1:11435;
+      }
+      upstream llama3_server {
+        server 127.0.0.1:11436;
+      }
+      upstream qwen2_server {
+        server 127.0.0.1:11437;
+      }
+      upstream aya_server {
+        server 127.0.0.1:11438;
+      }
+      upstream mistral_server {
+        server 127.0.0.1:11439;
+      }
+      upstream gemma_server {
+        server 127.0.0.1:11440;
+      }
+      upstream wizardlm2_server {
+        server 127.0.0.1:11441;
+      }
+      upstream openchat_server {
+        server 127.0.0.1:11442;
+      }      
+      upstream packet_kai8 {
+        server 127.0.0.1:8501;
+      }
+
+      server {
+        listen 80;
+
+        # Existing configurations with rewrite rules
+        location /api/tinyllama/generate {
+          rewrite ^/api/tinyllama/generate(.*)$ $1 break;
+          proxy_pass http://tinyllama_server;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /api/phi3/generate {
+          rewrite ^/api/phi3/generate(.*)$ $1 break;
+          proxy_pass http://phi3_server;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /api/llama3/generate {
+          rewrite ^/api/llama3/generate(.*)$ $1 break;
+          proxy_pass http://llama3_server;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /api/qwen2/generate {
+          rewrite ^/api/qwen2/generate(.*)$ $1 break;
+          proxy_pass http://qwen2_server;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /api/aya/generate {
+          rewrite ^/api/aya/generate(.*)$ $1 break;
+          proxy_pass http://aya_server;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /api/mistral/generate {
+          rewrite ^/api/mistral/generate(.*)$ $1 break;
+          proxy_pass http://mistral_server;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /api/gemma/generate {
+          rewrite ^/api/gemma/generate(.*)$ $1 break;
+          proxy_pass http://gemma_server;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /api/wizardlm2/generate {
+          rewrite ^/api/wizardlm2/generate(.*)$ $1 break;
+          proxy_pass http://wizardlm2_server;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /api/openchat/generate {
+          rewrite ^/api/openchat/generate(.*)$ $1 break;
+          proxy_pass http://openchat_server;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }       
+        
+        location /packet_kai8/ {
+          proxy_pass http://packet_kai8/;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+          client_max_body_size 200M;
+        }
+
+        # New locations to avoid rewrite
+        location /backend/tinyllama/generate {
+          proxy_pass http://tinyllama_server/api/generate;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /backend/phi3/generate {
+          proxy_pass http://phi3_server/api/generate;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /backend/llama3/generate {
+          proxy_pass http://llama3_server/api/generate;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /backend/qwen2/generate {
+          proxy_pass http://qwen2_server/api/generate;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /backend/aya/generate {
+          proxy_pass http://aya_server/api/generate;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /backend/mistral/generate {
+          proxy_pass http://mistral_server/api/generate;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /backend/gemma/generate {
+          proxy_pass http://gemma_server/api/generate;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /backend/wizardlm2/generate {
+          proxy_pass http://wizardlm2_server/api/generate;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+        location /backend/openchat/generate {
+          proxy_pass http://openchat_server/api/generate;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }        
+      }
+    }
