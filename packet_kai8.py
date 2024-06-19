@@ -175,6 +175,36 @@ class ChatWithPCAP:
         for result in all_results:
             self.conversation_history.append(AIMessage(content=f"Model: {result['model']} - {result['answer']}"))
 
+def model_selection():
+    st.title("Select Models")
+    all_models = ["gemma", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat"]
+
+    def select_all():
+        for model in all_models:
+            st.session_state.selected_models[model] = True
+
+    def deselect_all():
+        for model in all_models:
+            st.session_state.selected_models[model] = False
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button('Select All Models'):
+            select_all()
+    with col2:
+        if st.button('Deselect All Models'):
+            deselect_all()
+
+    col1, col2, col3 = st.columns(3)
+    for idx, model in enumerate(all_models):
+        col = [col1, col2, col3][idx % 3]
+        with col:
+            st.session_state.selected_models[model] = st.checkbox(model, value=st.session_state.selected_models[model], key=model)
+
+    if st.button('Next'):
+        st.session_state.page = 2
+        st.rerun()
+
 # Function to convert pcap to JSON
 def pcap_to_json(pcap_path, json_path):
     command = f'tshark -nlr {pcap_path} -T json > {json_path}'
@@ -196,7 +226,8 @@ def upload_and_convert_pcap():
         st.success("PCAP file uploaded and converted to JSON.")
         # Fetch and display the models in a select box
         if st.button("Proceed to Chat"):
-            st.session_state['page'] = 2        
+            st.session_state.page = 3
+            st.rerun()     
 
 # Streamlit UI for chat interface
 def chat_interface():
@@ -222,8 +253,12 @@ def chat_interface():
 if __name__ == "__main__":
     if "page" not in st.session_state:
         st.session_state["page"] = 1
+    if 'selected_models' not in st.session_state:
+        st.session_state.selected_models = {model: False for model in ["gemma", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat"]}
 
-    if st.session_state["page"] == 1:
+    if st.session_state.page == 1:
+        model_selection()
+    elif st.session_state.page == 2:
         upload_and_convert_pcap()
-    elif st.session_state["page"] == 2:
+    elif st.session_state.page == 3:
         chat_interface()
