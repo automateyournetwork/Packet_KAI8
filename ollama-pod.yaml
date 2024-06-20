@@ -204,6 +204,50 @@ spec:
     volumeMounts:
     - mountPath: /models
       name: model-storage      
+  - name: ollama-yi
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull yi && tail -f /dev/null']
+    ports:
+    - containerPort: 11443
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11443"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage
+  - name: ollama-falcon2
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull falcon2 && tail -f /dev/null']
+    ports:
+    - containerPort: 11444
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11444"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage 
   - name: packet-kai8
     image: johncapobianco/packet_kai8:latest
     ports:
