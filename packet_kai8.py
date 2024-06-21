@@ -151,9 +151,13 @@ class ChatWithPCAP:
                     }
                 )
 
+        # Initial consensus prompt
         consensus_prompt = (
-            f"I am asking you to try and come to consensus with other LLMs on the answer to this question: "
-            f"{question} Here are the answers from each LLM so far: {all_results}"
+            f"Hello, esteemed models. I am seeking your collective expertise to reach a consensus on the following question: "
+            f"{question}. Below are the individual responses from each model: {all_results}. "
+            "Please review these responses carefully and provide a reasoned summary that attempts to align and synthesize the varied perspectives. "
+            "Consider the strengths and weaknesses of each response, and aim to identify common themes or points of agreement."
+            "Keep the original question in mind and do your best to come up with the best, most agreed upon, answer to that original question."
         )
         consensus_responses = []
         for model in self.llm_chains.keys():
@@ -162,9 +166,13 @@ class ChatWithPCAP:
             st.markdown("""---""")
             consensus_responses.append(consensus_response)
 
+        # Final consensus prompt
         final_consensus_prompt = (
-            f"I am asking you to try and come to consensus with other LLMs on the answer to this question: "
-            f"{question} Here are the consensus answers from each LLM so far: {consensus_responses}"
+            f"Thank you for your thoughtful responses. Now, I ask you to further refine and come to a final consensus on the answer to this question: "
+            f"{question}. Here are the preliminary consensus answers from each model so far: {consensus_responses}. "
+            "Please critically evaluate these summaries, identify the most compelling arguments, and work towards a unified, well-supported final answer. "
+            "Your final response should integrate the best elements of each perspective and resolve any remaining discrepancies."
+            "Keep the original question in mind and do your best to come up with the best, most agreed upon, answer to that original question."
         )
         final_consensus_responses = []
         for model in self.llm_chains.keys():
