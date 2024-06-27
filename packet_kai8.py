@@ -78,7 +78,7 @@ class ChatWithPCAP:
 
     def initialize_llm_chains(self):
         llm_chains = {}
-        models = ["gemma", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat"]
+        models = ["gemma2", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat"]
 
         def create_qa_chain(model):
             llm = Ollama(model=model, base_url=f"http://localhost:80/api/{model}/generate")
@@ -187,7 +187,7 @@ class ChatWithPCAP:
 
 def model_selection():
     st.title("Select Models")
-    all_models = ["gemma", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat"]
+    all_models = ["gemma2", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat"]
 
     def select_all():
         for model in all_models:
@@ -264,7 +264,7 @@ if __name__ == "__main__":
     if "page" not in st.session_state:
         st.session_state["page"] = 1
     if 'selected_models' not in st.session_state:
-        st.session_state.selected_models = {model: False for model in ["gemma", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat"]}
+        st.session_state.selected_models = {model: False for model in ["gemma2", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat"]}
 
     if st.session_state.page == 1:
         model_selection()

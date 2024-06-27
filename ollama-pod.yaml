@@ -138,9 +138,9 @@ spec:
     volumeMounts:
     - mountPath: /models
       name: model-storage
-  - name: ollama-gemma
+  - name: ollama-gemma2
     image: ollama/ollama:latest
-    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull gemma && tail -f /dev/null']
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull gemma2 && tail -f /dev/null']
     ports:
     - containerPort: 11440
     env:
