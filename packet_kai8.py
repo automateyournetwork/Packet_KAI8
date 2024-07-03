@@ -78,7 +78,7 @@ class ChatWithPCAP:
 
     def initialize_llm_chains(self):
         llm_chains = {}
-        models = ["gemma2", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat"]
+        models = ["gemma2", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat", "yi", "falcon2", "internlm2"]
 
         def create_qa_chain(model):
             llm = Ollama(model=model, base_url=f"http://localhost:80/api/{model}/generate")
@@ -187,7 +187,7 @@ class ChatWithPCAP:
 
 def model_selection():
     st.title("Select Models")
-    all_models = ["gemma2", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat"]
+    all_models = ["gemma2", "aya", "llama3", "mistral", "wizardlm2", "qwen2", "phi3", "tinyllama", "openchat", "yi", "falcon2", "internlm2"]
 
     def select_all():
         for model in all_models:

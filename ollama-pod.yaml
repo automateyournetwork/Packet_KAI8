@@ -247,7 +247,29 @@ spec:
         cpu: "2"
     volumeMounts:
     - mountPath: /models
-      name: model-storage 
+      name: model-storage
+  - name: ollama-internlm2
+    image: ollama/ollama:latest
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull internlm2 && tail -f /dev/null']
+    ports:
+    - containerPort: 11445
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11445"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    volumeMounts:
+    - mountPath: /models
+      name: model-storage      
   - name: packet-kai8
     image: johncapobianco/packet_kai8:latest
     ports:
