@@ -122,18 +122,54 @@ class ChatWithPCAP:
         """Initialize conversation memory for chat history."""
         self.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
-    def send_request(self, model, prompt):
+    def initialize_llm_chains(self):
+        llm_chains = {}
+
+        # Map full model names to their URL aliases
         model_aliases = {
-            "llama3.1": "llama3",  # Matches NGINX route /backend/llama3/generate
-            "nezahatkorkmaz/deepseek-v3": "deepseek",  # Matches /backend/deepseek/generate
+            "gemma2": "gemma2",
+            "llama3.1": "llama3",
+            "mistral": "mistral",
+            "qwen": "qwen",
+            "phi4": "phi4",
+            "nezahatkorkmaz/deepseek-v3": "deepseek"
         }
+
+        def create_qa_chain(model, alias):
+            llm = Ollama(model=model, base_url=f"http://localhost:80/api/{alias}/generate")
+            qa_chain = ConversationalRetrievalChain.from_llm(
+                llm,
+                self.vectordb.as_retriever(search_kwargs={"k": 10}),
+                memory=self.memory
+            )
+            return qa_chain
+
+        for model, alias in model_aliases.items():
+            llm_chains[model] = create_qa_chain(model, alias)
+
+        # FIX: Assign llm_chains to self.llm_chains
+        self.llm_chains = llm_chains
+    
+    def send_request(self, model, prompt):
+        # Same alias mapping for the request
+        model_aliases = {
+            "gemma2": "gemma2",
+            "llama3.1": "llama3",
+            "mistral": "mistral",
+            "qwen": "qwen",
+            "phi4": "phi4",
+            "nezahatkorkmaz/deepseek-v3": "deepseek"
+        }
+    
+        # Get the alias for the model
         alias = model_aliases.get(model, model)
+    
         url = f"http://localhost:80/backend/{alias}/generate"
         headers = {
             "Content-Type": "application/json"
         }
         data = {
-            "model": model,  # Use the exact model name here
+            "model": model,
             "prompt": prompt,
             "stream": False,
             "keep_alive": 0
@@ -144,33 +180,6 @@ class ChatWithPCAP:
             return response.json().get('response', '')
         except requests.exceptions.RequestException as e:
             return f"Error: {e}"
-
-    def initialize_llm_chains(self):
-        """Set up the LLM chains for RAG-based retrieval."""
-        llm_chains = {}
-        model_aliases = {
-            "llama3.1": "llama3",
-            "nezahatkorkmaz/deepseek-v3": "deepseek",
-        }
-    
-        models = ["llama3.1", "mistral", "qwen", "gemma2", "phi4", "nezahatkorkmaz/deepseek-v3"]
-    
-        def create_qa_chain(model):
-            alias = model_aliases.get(model, model)
-            llm = Ollama(
-                model=model,
-                base_url=f"http://localhost:80/backend/{alias}/generate"  # Corrected URL
-            )
-            qa_chain = ConversationalRetrievalChain.from_llm(
-                llm,
-                self.vectordb.as_retriever(search_kwargs={"k": 10}),
-                memory=self.memory
-            )
-            return qa_chain
-    
-        for model in models:
-            llm_chains[model] = create_qa_chain(model)
-        self.llm_chains = llm_chains
 
     def chat(self, question):
         all_results = []
