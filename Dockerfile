@@ -15,7 +15,7 @@ RUN echo "==> Install dos2unix..." \
   && sudo apt-get install dos2unix -y 
 
 RUN echo "==> Install langchain requirements.." \
-  && pip install -U --quiet langchain_experimental langchain langchain-community \
+  && pip install -U --quiet langchain_experimental langchain langchain-community langchain-openai \
   && pip install chromadb \
   && pip install tiktoken
 
@@ -34,11 +34,10 @@ RUN echo "==> Adding pyshark ..." \
 RUN echo "==> Adding requests ..." \
   && pip install requests
 
-RUN echo "==> Adding InstructorEmbedding ..." \
-  && pip install -U sentence-transformers==2.2.2 \
-  && pip install InstructorEmbedding
+RUN echo "==> Adding dotenv ..." \
+  && pip install python-dotenv
 
-# Set the working directory
+  # Set the working directory
 WORKDIR /app
 
 # Copy the required files and directories into the working directory

@@ -37,6 +37,7 @@ In order run the following commands from Ubuntu:
 
 ```console
 $ kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.15.0/deployments/static/nvidia-device-plugin.yml
+$ kubectl create secret generic openai-api-key-secret --from-env-file=.env
 $ kubectl apply -f ollama-service.yaml
 $ kubectl apply -f nginx-config.yaml
 $ kubectl apply -f ollama-pod.yaml
