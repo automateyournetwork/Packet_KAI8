@@ -15,12 +15,15 @@ data:
       upstream gemma2_server {
         server 127.0.0.1:11434;
       }
-      upstream qwen_server {
+      upstream commandr_server {
         server 127.0.0.1:11435;
       }
-      upstream llama3_server {
+      upstream llama3_1_server {
         server 127.0.0.1:11436;
       }
+      upstream llama3_2_server {
+        server 127.0.0.1:11437;
+      }      
       upstream mistral_server {
         server 127.0.0.1:11439;
       }
@@ -51,9 +54,9 @@ data:
         }
 
         # Existing configurations with rewrite rules
-        location /api/qwen/generate {
-          rewrite ^/api/qwen/generate(.*)$ $1 break;
-          proxy_pass http://qwen_server;
+        location /api/commandr/generate {
+          rewrite ^/api/commandr/generate(.*)$ $1 break;
+          proxy_pass http://commandr_server;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -63,9 +66,21 @@ data:
           proxy_send_timeout 600s;
         }
 
-        location /api/llama3/generate {
-          rewrite ^/api/llama3/generate(.*)$ $1 break;
-          proxy_pass http://llama3_server;
+        location /api/llama3_1/generate {
+          rewrite ^/api/llama3_1/generate(.*)$ $1 break;
+          proxy_pass http://llama3_1_server;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /api/llama3_2/generate {
+          rewrite ^/api/llama3_2/generate(.*)$ $1 break;
+          proxy_pass http://llama3_2_server;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -135,8 +150,8 @@ data:
           proxy_send_timeout 600s;
         }
 
-        location /backend/qwen/generate {
-          proxy_pass http://qwen_server/api/generate;
+        location /backend/commandr/generate {
+          proxy_pass http://commandr_server/api/generate;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -146,8 +161,19 @@ data:
           proxy_send_timeout 600s;
         }
 
-        location /backend/llama3/generate {
-          proxy_pass http://llama3_server/api/generate;
+        location /backend/llama3_1/generate {
+          proxy_pass http://llama3_1_server/api/generate;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_read_timeout 600s;
+          proxy_connect_timeout 600s;
+          proxy_send_timeout 600s;
+        }
+
+        location /backend/llama3_2/generate {
+          proxy_pass http://llama3_2_server/api/generate;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

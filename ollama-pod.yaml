@@ -29,10 +29,10 @@ spec:
     volumeMounts:
     - mountPath: /models
       name: model-storage
-  - name: ollama-qwen
+  - name: ollama-commandr
     image: ollama/ollama:latest
     imagePullPolicy: IfNotPresent
-    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull qwen && tail -f /dev/null']
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull command-r7b && tail -f /dev/null']
     ports:
     - containerPort: 11435
     env:
@@ -52,7 +52,7 @@ spec:
     volumeMounts:
     - mountPath: /models
       name: model-storage
-  - name: ollama-llama3
+  - name: ollama-llama31
     image: ollama/ollama:latest
     imagePullPolicy: IfNotPresent
     command: ['sh', '-c', 'ollama start & sleep 20; ollama pull llama3.1 && tail -f /dev/null']
@@ -72,6 +72,26 @@ spec:
       limits:
         memory: "1Gi"
         cpu: "500m"
+  - name: ollama-llama32
+    image: ollama/ollama:latest
+    imagePullPolicy: IfNotPresent
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull llama3.2 && tail -f /dev/null']
+    ports:
+    - containerPort: 11437
+    env:
+    - name: OLLAMA_MODEL_PATH
+      value: /models/
+    - name: OLLAMA_HOST
+      value: "127.0.0.1:11437"
+    - name: OLLAMA_KEEP_ALIVE
+      value: "0"      
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "250m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"        
     volumeMounts:
     - mountPath: /models
       name: model-storage
@@ -124,7 +144,7 @@ spec:
   - name: ollama-deepseek
     image: ollama/ollama:latest
     imagePullPolicy: IfNotPresent
-    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull nezahatkorkmaz/deepseek-v3 && tail -f /dev/null']
+    command: ['sh', '-c', 'ollama start & sleep 20; ollama pull deepseek-r1 && tail -f /dev/null']
     ports:
     - containerPort: 11441
     env:

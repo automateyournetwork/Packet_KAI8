@@ -128,11 +128,12 @@ class ChatWithPCAP:
         # Map full model names to their URL aliases
         model_aliases = {
             "gemma2": "gemma2",
-            "llama3.1": "llama3",
+            "llama3.1": "llama3_1",
+            "llama3.2": "llama3_2", 
             "mistral": "mistral",
-            "qwen": "qwen",
+            "command-r7b": "commandr",
             "phi4": "phi4",
-            "nezahatkorkmaz/deepseek-v3": "deepseek"
+            "deepseek-r1": "deepseek"
         }
 
         def create_qa_chain(model, alias):
@@ -154,11 +155,12 @@ class ChatWithPCAP:
         # Same alias mapping for the request
         model_aliases = {
             "gemma2": "gemma2",
-            "llama3.1": "llama3",
+            "llama3.1": "llama3_1",
+            "llama3.2": "llama3_2",  # Add alias for llama3.2
             "mistral": "mistral",
-            "qwen": "qwen",
+            "command-r7b": "commandr",
             "phi4": "phi4",
-            "nezahatkorkmaz/deepseek-v3": "deepseek"
+            "deepseek-r1": "deepseek"
         }
     
         # Get the alias for the model
@@ -264,7 +266,7 @@ class ChatWithPCAP:
 
 def model_selection():
     st.title("Select Models")
-    all_models = ["llama3.1", "mistral", "qwen", "gemma2", "phi4", "nezahatkorkmaz/deepseek-v3"]
+    all_models = all_models = ["llama3.1", "llama3.2", "command-r", "mistral", "gemma2", "phi4", "deepseek-r1"]
 
     def select_all():
         for model in all_models:
@@ -366,7 +368,7 @@ if __name__ == "__main__":
     if "page" not in st.session_state:
         st.session_state["page"] = 1
     if 'selected_models' not in st.session_state:
-        st.session_state.selected_models = {model: False for model in ["llama3.1", "mistral", "qwen", "gemma2", "phi4", "nezahatkorkmaz/deepseek-v3"]}
+        st.session_state.selected_models = {model: False for model in ["llama3.1", "llama3.2", "command-r", "mistral", "gemma2", "phi4", "deepseek-r1"]}
 
     if st.session_state.page == 1:
         model_selection()
